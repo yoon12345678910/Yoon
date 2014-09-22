@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>클로저3 :  </title>
+<script>
+</script>
+</head>
+
+<body>
+
+<script>
+
+"use strict";
+
+var score = [100, 90, 80, 70, 80];
+
+//문제: 5개 과목의 성적 합계를 구하시오!
+//클로저 사용 전
+var sum = 0;
+var avg = 0;
+for(var i in score){
+	sum += score[i];
+	avg = sum/score.length;
+}
+console.log(sum);
+console.log("평균",avg);
+
+//클로저 사용 후
+function each(arr, func){
+	  for(var i in arr){
+		  func(i, arr[i]);
+	  }
+}
+
+
+ var result2 = 0;
+ var avg =0;
+ each(score, function(index, value){
+	 result2 += value;
+	 avg = result2/score.length;
+
+ });
+  
+ console.log(avg);
+ console.log(score.length);
+
+ 
+ each();
+ console.log(result2);
+ </script>
+
+</body>
+</html>
+
+
+
+
+<!-- 
+function each(arr, func){
+   for(var i in arr){
+     func(i, arr[i]);
+   }
+ }
+ 
+ var result2 = 0;
+ var avg =0;
+ each(score, function(index, value){
+   result2 += value;
+   avg = result2/score.length;
+
+ });
+ 
+ console.log(avg);
+ console.log(score.length);
+
+
+
+ -->
+
+
+
+
+
+
+
