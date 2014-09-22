@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>함수 기본 변수: arguments</title>
+<script>
+</script>
+</head>
+
+<body>
+
+<script>
+
+"use strict";
+
+
+//함수의 모든 아규먼트는 arguments라는 배열에 보관된다.
+//arguments 배열은 내부에 선언되어 있다.
+function plus(a, b){
+	console.log("---------------------------------------");
+	  
+	console.log("a=",a);
+	console.log("b=",b);
+	console.log("arguments 의 길이",arguments.length);
+	for(var i in arguments){
+	console.log("argument["+ i + "] = ",arguments[i]);
+	}
+	  	
+	return a + b;
+}
+
+//넘겨주는값 아규먼트 ex) 3라는 아규먼트
+var result = plus(3, 5); 
+console.log(result);
+
+result = plus(30, 40, 50, 60);
+
+
+//다음과 같이 파라미터를 사용하지 않고 arguments를 사용하는 방식은
+//코드의 가독성을 떨어뜨린다.
+//arguments는 함수를 호출할 때 인자 개수가 가변적!!!일 때 사용하는 것이 좋다.
+function minus(){
+return arguments[0] - arguments[1]; 
+}
+
+console.log("x - y = ", minus(10,20));
+
+
+
+//arguments 사용에 적합한 사례 가변적일 때!!!!!
+function accum(){
+	var result = 0;
+	for (var i in arguments){
+		result += arguments[i];
+	}
+	return result;
+}
+console.log("arguments 사용에 적합한 사례");
+console.log(accum(100,70,50,80,100));
+console.log(accum(50,90,50));
+console.log(accum(20,50));
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

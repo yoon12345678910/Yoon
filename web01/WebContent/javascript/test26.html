@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>자바스크립트 실행 순서2</title>
+<script>
+console.log("111");
+</script>
+</head>
+
+<body>
+
+<script>
+
+"use strict";
+/*각 <script>태그의 실행순서
+1)함수 선언을 먼저 실행한다.
+2)일반 명령문을 실행한다.
+*/
+
+
+//함수 선언
+function f1(){
+	console.log("f1.......");
+}
+
+//함수 호출
+f1();
+f2(); //과연 호출될까? YES =>함수 선언을 먼저 실행했기때문에
+f3(); //NO 다음 <script> 태그를 실행하기 전에 먼저 실행하기 때문 
+//각 태그별로 함수 선언 먼저 실행하고 명령문을 실행!
+
+function f2(){
+	console.log("f2........");
+}
+</script>
+
+<script>
+//이전 태그에서 선언한 함수 사용 가능
+console.log("두번째 태그~~~~~~~~~");
+f1();
+f2();
+f3();
+
+function f3(){
+	console.log("f3..........");
+}
+</script>
+
+<script>
+//이전 태그에서 선언한 함수 사용 가능
+console.log("세번째 태그~~~~~~~~~");
+f1();
+</script>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
