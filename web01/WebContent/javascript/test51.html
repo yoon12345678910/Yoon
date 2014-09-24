@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>기타 함수들</title>
+<script>
+</script>
+</head>
+
+<body>
+
+<script>
+
+"use strict";
+//JSON.parse(JSON형식의 문자열): 자바스크립트 객체를 만들어 리턴한다.
+//JSON형식의 규칙:
+//1) 키는 반드시 인용부호("키")로 표현해야 한다.
+//2) 문자열은 반드시 인용부호("문자열")로 표현해야 한다.
+//3) 작은 따옴표를 사용해서는 안된다.
+var jsonString = '{"name":"홍길동", "kor":100, "eng":100, "math":100}';
+
+//문자열로 된 자바스크립트 명령어를 실행하기
+//eval() 사용 => 객체를 생성하여 리턴하는 경우=>반드시 양쪽에 괄호를 붙여야한다.
+
+var obj1 = eval('('+jsonString+')');
+console.log(obj1.name);
+
+//eval()은 모든 자바스크립트 문자를 실행
+eval('var v = prompt("당신의 나이는?"); alert(v);');
+
+
+//eval() 사용하려면 양쪽에 '('를 써야하는데
+//등장!! 자바스크립트의 객체 생성 문장을 전문적으로 실행하는 메서드가 추가됨
+//JSON.parse(JSON문자열)
+//JSON = JavaScript Object Notation 자바스크립트 문법을 표준하기ㅎ위해
+var obj2 = JSON.parse(jsonString);
+console.log(obj2.name);
+
+
+//JSON형식이 아닌 일반 자바스크립트 명령은 실행할 수 없다.
+//JSON.parse('var v = prompt("당신의 나이는?"); alert(v);'); //오류
+
+//JSON.stringify() : 객체를 JSON형식의 문자열로 만들어 리턴한다.
+console.log("JSON.stringify()------------------------------");
+var obj3 = {
+	name : "홍길동",
+	kor : 100,
+	eng : 100,
+	math : 100,
+	female : true
+};
+
+var jsonString2 = JSON.stringify(obj3);
+console.log(jsonString2);
+
+/* JSON 장점
+
+- JSON은 텍스트로 이루어져 있으므로, 사람과 기계 모두 읽고 쓰기 쉽다.
+
+- 프로그래밍 언어와 플랫폼에 독립적이므로, 서로 다른 시스템간에 객체를 교환하기에 좋다.
+- 자바스크립트의 문법을 채용했기 때문에, 자바스크립트에서 eval 명령으로 곧바로 사용할 수 있다. 이런 특성은 자바스크립트를 자주 사용하는 웹 환경에서 유리하다. 그러나 실질적으로 eval 명령을 사용하면 외부에서 악성 코드가 유입될 수 있다. 모질라 파이어폭스 3.5, 인터넷 익스플로러 8, 오페라 10.5, 사파리, 구글 크롬 등 대부분의 최신 웹 브라우저는 JSON 전용 파서 기능을 내장하고 있으므로 이런 기능을 사용하는 것이 더 안전할 뿐만 아니라 빠른 방법이다.
+
+[출처] 14. JSON|작성자 dimigozzang
+ */
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
