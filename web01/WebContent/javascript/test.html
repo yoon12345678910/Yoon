@@ -17,6 +17,7 @@ form th{
 <body>
 <!-- 게시판 목록 -->
 <table border = 1  width="100%"  >
+
 <tr>
 <th>No</th>
 <th>Title</th>
@@ -126,16 +127,7 @@ function resetBoard(){
 		'bubbles':true,
 		'cancleable':true
 	});
-	
-	//rest 버튼에게 click 이벤트를 전달
-	
 	document.getElementById('btnReset').dispatchEvent(event);
-	/* document.getElementById('title').value='';
-	document.getElementById('content').value='';
-	document.getElementById('writer').value='';
-	document.getElementById('password').value='';
-	document.getElementById('title').focus();*/
-
 };
 
 function outputBoardList(){

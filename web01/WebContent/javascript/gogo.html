@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+
+<table border = '1'>
+	<tr>
+		<th>번호</th>
+		<th>제목</th>
+		<th>작성자</th>
+		<th>날짜</th>
+		<th>조회수</th>
+	</tr>
+	
+	<tr>
+		<td>3</td>
+		<td>제목3</td>
+		<td>작성자3</td>
+		<td>2013-02-13</td>
+		<td>1</td>
+	</tr>
+	
+		<tr>
+		<td>2</td>
+		<td>제목2</td>
+		<td>작성자2</td>
+		<td>2014-05-13</td>
+		<td>1</td>
+	</tr>
+	
+		<tr>
+		<td>1</td>
+		<td>제목1</td>
+		<td>작성자1</td>
+		<td>2012-12-21</td>
+		<td>151</td>
+	</tr>
+</table>
+
+<hr>
+<h2> 게시물 내용</h2>
+<form>
+<table>
+<tr>
+<th>
+	<h2>제목</h2>
+</th>
+	<td>
+		<input type ='text' id ='title'>
+	</td>
+</tr>
+
+<tr>
+<th>
+	<h2>내용</h2>
+</th>
+	<td>
+		<textarea type ='text' id ='content'  rows = '10' cols = '50'></textarea>
+	</td>
+</tr>
+
+<tr>
+<th>
+	<h2>작성자</h2>
+</th>
+	<td>
+		<input type ='text' id ='writer'>
+	</td>
+</tr>
+
+<tr>
+<th>
+	<h2>비밀번호</h2>
+</th>
+	<td>
+		<input type ='text' id ='password'>
+	</td>
+</tr>
+</table>
+
+<table>
+	<tr>
+		<td>
+			<input type = 'button' id='btnAdd' value ='글쓰기'>
+		</td>
+		
+		<td>
+			<input type = 'reset' id='btnCancle' value ='취소'>
+		</td>	
+	</tr>
+	
+</table>
+</form>
+<script>
+	
+	var boardList =[];
+	
+	function boardForm(title, content, writer, password){
+		this.title = title;
+		this.content = content;
+		this.writer = writer;
+		this.password = password;
+		this.date = new Date();
+		this.count =  0;
+	};
+	
+	function boardReset(){
+		
+		var event = new MouseEvent('click',{
+			'view' : window,
+			'bubbles' : true,
+			'cancleable' : true
+		});
+		
+		document.getElementById('btnCancle').dispatchEvent(event);
+	};
+
+	 function outputBoardList(){
+		 console.log('-------------------------------------------');
+		for(var i in boardList){
+		console.log(boardList[i].title,
+				boardList[i].content,
+				boardList[i].writer,
+				boardList[i].password,
+				boardList[i].date,
+				boardList[i].count
+				);
+		}; 
+	 };
+	 
+	 document.getElementById('btnAdd').onclick = function(event){
+		 var board = new boardForm(
+				 document.getElementById('title').value,
+				 document.getElementById('content').value,
+				 document.getElementById('writer').value,
+				 document.getElementById('password').value
+		 );
+		 boardList.push(board);
+		 boardReset();
+		 outputBoardList();
+		 
+	 };
+	 
+	 
+</script>
+
+</body>
+</html>
