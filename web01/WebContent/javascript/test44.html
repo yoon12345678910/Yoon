@@ -13,7 +13,7 @@
 
 "use strict";
 //Object.create()를 사용하여 객체 생성
-var obj1 = Object.create({},{
+var obj1 = Object.create(Object.prototype,{
 	name:{value:"홍길동", writable:true, enumerable: true},
 	kor :{value:100, writable:true, enumerable: true},
 	eng :{value:50, writable:true, enumerable: true},
