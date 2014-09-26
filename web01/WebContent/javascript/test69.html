@@ -3,175 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <title>본격 게시판 만들기!!!</title>
-<style>
-
-
-form th{
-	text-align :center;
-}
-</style>
-
-
+	<style>
+		form th{
+			text-align :center;
+		}
+	</style>
 </head>
 
 <body>
 <!-- 게시판 목록 -->
-<table border = 1  width="100%"  >
-<tr>
-<th>No</th>
-<th>Title</th>
-<th>Writer</th>
-<th>Date</th>
-<th>Count</th>
-</tr>
 
-<tr>
-<td>3</td>
-<td>aaaaa</td>
-<td>hong</td>
-<td>2014-1-1</td>
-<td>0</td>
-</tr>
-
-<tr>
-<td>2</td>
-<td>bbbbb</td>
-<td>eim</td>
-<td>2014-1-1</td>
-<td>10</td>
-
-</tr>
-
-<tr>
-<td>1</td>
-<td>ccccc</td>
-<td>yoon</td>
-<td>2013-1-1</td>
-<td>3</td>
-</tr>
-
+<table id = "bdTable" border = "1"  width="100%"  >
+	<tr >
+		<th>No</th>
+		<th>Title</th>
+		<th>Writer</th>
+		<th>Date</th>
+		<th>Count</th>
+	</tr>
 </table>
 
 <hr>
 <h2>게시물 내용</h2>
+
+
 <form>
 
-
 <table width="100%" border="1">
+	<tr class = 'detail'>
+		<th>No</th>
+			<td>
+				<input id = 'no' type = 'text'>
+			</td>
+	</tr>
+
 <tr>
-<th>Title</th>
-<td>
-	<input id = 'title' type = 'text'>
-</td>
+	<th>Title</th>
+		<td>
+			<input id = 'title' type = 'text'>
+		</td>
 </tr>
 
 <tr>
-<th>Context</th>
-<td>
-	
-<textarea id = 'content' type = 'text'  rows='10' cols='100'></textarea>
-</td>
+	<th>Context</th>
+		<td>
+			<textarea id = 'content' type = 'text'  rows='10' cols='100'></textarea>
+		</td>
 </tr>
 
 <tr>
-<th>Writer</th>
-<td>
-<input id = 'writer' type = 'text'>
-</td>
+	<th>Writer</th>
+		<td>
+			<input id = 'writer' type = 'text'>
+		</td>
 </tr>
 
-<tr>
-<th>Password</th>
-<td>
-	<input id = 'password' type = 'password'>
-</td>
+<tr class = 'create'>
+		<th>Password</th>
+			<td>
+				<input id = 'password' type = 'password'>
+			</td>
+</tr>
+
+<tr class = 'detail'>
+		<th>date</th>
+			<td>
+				<input id = 'date' type = 'text'>
+			</td>
 </tr>
    </table>
 
 
 <table width="100%"  border="1">
- <tr>
-   <td>
-   <input type=button value="글쓰기" id = "btnAdd">
-   
-    <input type=reset  value="취소" id = "btnReset">
-    
-   </td> 
-   </tr> 
-   </table>
+ 	<tr>
+   		<td>
+   			<input type=button value="글쓰기" id = "btnAdd" class = 'create'>
+   			<input type=button value="변경" id = "btnChange" class = 'detail'>
+   			<input type=button value="삭제" id = "btnDelete" class = 'detail'>
+    		<input type=reset  value="취소" id = "btnReset">
+   		</td> 
+   	</tr> 
+</table>
 
 </form>
 
+<!-- 목표:자바스크립트와 HTML소스분리 -->
+<script src = 'test69.js'></script>
 
-<script>
-"use strict";
-
-
-//게시글을 저장하는 객체 생성자 함수
-
-var boardList = [];
-
-function BoardAdd(title, content, writer, password ){
-	this.title = title;
-	this.content = content;
-	this.writer = writer;
-	this.password = password;
-	this.date = new Date();
-	this.count = 0;	
-};
-
-function resetBoard(){
-	var event = new MouseEvent('click',{
-		'view': window,
-		'bubbles':true,
-		'cancleable':true
-	});
-	
-	//rest 버튼에게 click 이벤트를 전달
-	
-	document.getElementById('btnReset').dispatchEvent(event);
-	/* document.getElementById('title').value='';
-	document.getElementById('content').value='';
-	document.getElementById('writer').value='';
-	document.getElementById('password').value='';
-	document.getElementById('title').focus();*/
-
-};
-
-function outputBoardList(){
-	console.log("----------------------------");
-	for(var i in boardList){
-		console.log(boardList[i].title,
-		boardList[i].content,
-		boardList[i].writer,
-		boardList[i].password,
-		boardList[i].date,
-		boardList[i].count	
-		);
-	}
-};
-
-
-
-document.getElementById('btnAdd').onclick = function(event){
-
-	var board =new BoardAdd (
-			document.getElementById('title').value,
-			document.getElementById('content').value,
-	        document.getElementById('writer').value,
-		    document.getElementById('password').value
-	
-	);
-
-	//console.log(title, content, writer, password );
-	
-	boardList.push(board);
-	
-	resetBoard();	
-	outputBoardList();
-	
-};
-
-</script>
 </body>
 </html>
