@@ -1,0 +1,76 @@
+@CHARSET "UTF-8";
+
+
+
+#header{
+	/* border:1px solid red; */
+	background-image:url(bg.jpg);
+	/* background-position: right bottom; */
+	background-position:-500px -850px;
+	height:100px;
+}
+
+
+#sidebar{
+	
+	width:150px;
+	/* border:1px solid green; */
+	background:url(bg2.png) no-repeat bottom right #90ee90;
+	
+	float: left;
+}
+
+
+#content{
+	line-height:1.5em;
+	/* border : 1px solid blue; */
+	margin-left:170px;
+}
+
+
+#footer{
+	clear: left; /* 왼쪽에 부딪히는 것이 잇으면 아래로 이동하라 */
+	/* border : 1px solid black; */
+	text-align:center;
+}
+#logo{
+/* 	border :1px solid red; */
+	
+	float:left;
+}
+
+
+#menubar{
+/* 	border :1px solid red; */
+		width: 400;
+		float:left;
+		margin-left :240px;
+	
+}
+
+#user{
+	border :1px solid black;
+	top: -30px;
+	position : relative;
+	padding: 0px;
+	
+}
+
+
+#user >img{
+
+	border-radius :7px;
+	
+}
+
+#userName{
+	
+/* 	border :1px solid red;
+ */
+position: relative;
+top: -30px;
+font-size: 1.3em;
+  font-weight: bold;
+margin-left: 5px
+	
+}

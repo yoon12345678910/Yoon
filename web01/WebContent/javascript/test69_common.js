@@ -1,65 +1,158 @@
-"use strict";
-var $ = help;
+"use strict"; 
 
-function help(value){
-	var element = null;
+//window.bit = function(value) {
+function bit(value) {
+	var elements = null;
 	
-	if(value instanceof Element){
-		element = value;
-	}else if(value.charAt(0) =='#'){
-		element =  document.getElementById(value.substring(1));
-	}else if(value.charAt(0) == '<'){
-		element =  document.createElement(
-				value.replace(/<|>/g,'')); //g글로벌
-	};
-	element.text = function(value){
-		this.textContent = value;
+	
+	if (value instanceof Element) {
+		elements = [value];
+	} else if (value.charAt(0) == '<') { 
+		elements = [document.createElement(value.replace(/<|>/g, ''))];	
+	}else{
+		elements = document.querySelectorAll(value);
+	}
+
+	elements.text = function(value) {
+		for(var i = 0; i<this.length; i++){
+			this[i].textContent = value;	
+		}
 		return this;
 	};
-	element.html =function(value){
-		this.innerHTML = value;
-		return this;
-	};	
-	element.append = function(child){
-		this.appendChild(child);
-		return this;
-	};
-	element.appendTo = function(parent){
-		parent.appendChild(this);
+
+	elements.html = function(value) {
+		for(var i = 0; i<this.length; i++){
+			this[i].innerHTML = value;
+		}
 		return this;
 	};
-	element.attr = function(name, value){
-		this.setAttribute(name, value);
+
+	elements.append = function(child) {
+		for(var i = 0; i<this.length; i++){
+			
+			if(child instanceof Element){
+				this[i].appendChild(child);
+				
+			}else{
+				for(var x = 0; x < child.length; x++){
+					this[i].appendChild(child[x]);
+				}
+				
+			}
+
+		}
 		return this;
 	};
-	element.click = function(listener){
-		if(listener){
-			this.onclick = listener;
-		}else {
-			var event = new MouseEvent('click',{
-				'view': window,
-				'bubbles':true,
-				'cancleable':true
-			});
-			$('#btnReset').dispatchEvent(event);
+
+	elements.appendTo = function(parent) {
+		for(var i = 0; i<this.length; i++){
+			
+			if(parent instanceof Element){
+				parent.appendChild(this[i]);
+			}else{	
+				parent[0].appendChild(this[i]);
+			}
+		}
+		return this;
+	};
+
+	elements.attr = function(name, value) {
+		if(arguments.length == 2){
+			for(var i = 0; i<this.length; i++){
+				this[i].setAttribute(name, value);
+			}
+			return this;
+		}else{
+			return this[0].getAttribute(name); 
+		}	
+	};
+
+	elements.click = function(listener) {
+		
+		for(var i = 0; i<this.length; i++){
+			if (listener) {
+				
+				this[i].onclick = listener;
+			} else {
+				var event = new MouseEvent('click', {
+					'view': window,
+					'bubbles': true,
+					'cancelable': true
+				});
+
+				this[i].dispatchEvent(event);
 			}
 			
-		};
-	element.val = function(value){
-		this.value = value;
+		}
 		return this;
 	};
-	element.css = function(name, vlaue){
-		this.style[name] = value;
+
+	elements.val = function(value) {
+		if(value){
+			for(var i = 0; i<this.length; i++){
+			this[i].value = value;
+			}
+			return this;
+		}else{
+			return this[0].value;   //값이 있을때는  엘리먼트 계수만큼 다 리턴(값을 넣어주지만)하지만 설정하지 않을때는 0 번째만 리턴한다.
+		}		
+	};
+
+	elements.css = function(name, value) {
+		if(arguments.length == 2){
+			for(var i = 0; i<this.length; i++){
+				
+			this[i].style[name] = value;
+			}
+			return this;
+		}else{
+			return this[0].style[name]; 
+		}	
+
 		return this;
 	};
-	return element;
+	
+	
+
+	elements.remove = function(){
+		for (var i = 0; i< this.length; i++){
+			this[i].parentElement.removeChild(this[i]);
+		}
+		return this	
+	};
+	
+	
+	
+	
+	
+	
+	
+	
+	return elements;
+}
+
+
+
+var $ = bit;
+
+//함수도 객체다! 저장소로 사용될 수 있다.
+bit.toYYYYMMDD = function(date) {
+	return date.getFullYear() + '-' +
+	(date.getMonth() + 1) + '-' +
+	date.getDate();
 };
 
 
 
-help.toYYYYMMDD = function(date){
-	return  date.getFullYear() + '-' +
-	(date.getMonth()+1) + '-' +
-	date.getDate();
-}; 
+
+
+
+
+
+
+
+
+
+
+
+

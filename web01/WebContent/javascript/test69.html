@@ -2,95 +2,89 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>본격 게시판 만들기!!!</title>
-	<style>
-		form th{
-			text-align :center;
-		}
-	</style>
+<title>게시판</title>
+<style>
+form th {
+  text-align: right;
+}
+</style>
 </head>
 
 <body>
 <!-- 게시판 목록 -->
-<h1>게시판</h1>
-<table id = "bdTable" border = "1"  width="100%"  >
-	<tr >
-		<th>No</th>
-		<th>Title</th>
-		<th>Writer</th>
-		<th>Date</th>
-		<th>Count</th>
-	</tr>
+<h1>게시판 목록</h1>
+<table id='boardTable' border='1'>
+<tr>
+  <th>번호</th>
+  <th>제목</th>
+  <th>작성자</th>
+  <th>등록일</th>
+  <th>조회수</th>
+</tr>
 </table>
-
 <hr>
-<h2>게시물 내용</h2>
-
-
+<h2>게시물 상세정보</h2>
 <form>
-
-<table width="100%" border="1">
-	<tr class = 'detail'>
-		<th>No</th>
-			<td>
-				<input id = 'no' type = 'text'>
-			</td>
-	</tr>
-
+<table>
+<tr class="detail">
+  <th>번호</th> 
+  <td><input type="text" id="no"></td>
+</tr>
 <tr>
-	<th>Title</th>
-		<td>
-			<input id = 'title' type = 'text'  >
-		</td>
+  <th>제목</th> 
+  <td><input type="text" id="title"></td>
 </tr>
-
+<tr> 
+  <th>내용</th> 
+  <td><textarea id="content"></textarea></td>
+</tr>
 <tr>
-	<th>Context</th>
-		<td>
-			<textarea id = 'content' type = 'text'  rows='10' cols='185%'></textarea>
-		</td>
+  <th>작성자</th> 
+  <td><input type="text" id="writer"></td>
 </tr>
-
-<tr>
-	<th>Writer</th>
-		<td>
-			<input id = 'writer' type = 'text'>
-		</td>
+<tr class="create">
+  <th>암호</th> 
+  <td><input type="password" id="password"></td>
 </tr>
-
-<tr class = 'create'>
-		<th>Password</th>
-			<td>
-				<input id = 'password' type = 'password'>
-			</td>
+<tr class="detail">
+  <th>등록일</th> 
+  <td><input type="text" id="date"></td>
 </tr>
-
-<tr class = 'detail'>
-		<th>date</th>
-			<td>
-				<input id = 'date' type = 'text'>
-			</td>
-</tr>
-   </table>
-
-
-<table width="100%"  border="1">
- 	<tr>
-   		<td>
-   			<input type=button value="글쓰기" id = "btnAdd" class = 'create'>
-   			<input type=button value="변경" id = "btnChange" class = 'detail'>
-   			<input type=button value="삭제" id = "btnDelete" class = 'detail'>
-    		<input type=reset  value="취소" id = "btnReset">
-   		</td> 
-   	</tr> 
 </table>
-
+<button id='btnAdd' type='button' class='create'>추가</button>
+<button id='btnChange' type='button' class='detail'>변경</button>
+<button id='btnDelete' type='button' class='detail'>삭제</button>
+<button id='btnCancel' type='reset'>취소</button>
 </form>
 
-<!-- 목표:자바스크립트와 HTML소스분리 -->
-<script src = 'test69_common.js'></script>
-<script src = 'test69.js'></script>
-
+<!-- 목표: 자바스크립트와 HTML 소스 분리 -->
+<script src='test69_common.js'></script>
+<script src='test69.js'></script>
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
