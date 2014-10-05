@@ -7,33 +7,43 @@ state();
 
 function state(){
 	currentMole =Math.floor(Math.random()*9)+1; 
-	
-	console.log("random", currentMole);
-	console.log(keypadCode[currentMole]);
+
+/*	console.log("random", currentMole);
+	console.log(keypadCode[currentMole]);*/
 	upMole();
-	setTimeout("state()", 2000);
+	setTimeout("state()", 750);
 }
 
 
 function upMole(){
 	   pos = "b" + keypadCode[ currentMole ];
-	  var  url="url('http://img3.wikia.nocookie.net/__cb20131108163037/pokemon/ko/images/c/cf/050_PGL.png')";
+	  var  url="url('mole.png')";
 	    document.all[pos].style.background = url;
-	    setTimeout("downMole()",1000);
+	    setTimeout("downMole()",750);
 }
 
 function downMole(){
 	pos = "b" + keypadCode[ currentMole ];
 	document.all[pos].style.background = '';
-	
+	document.all[pos].innerHTML = '';
+}
+
+function hit(){
+	pos = "b" + keypadCode[ currentMole ];
+	var  url="url('hit.png')";
+	document.all[pos].style.background = url;
+	/*document.all[pos].innerHTML = 'hit';
+	document.all[pos].style.color = "red";*/
 }
 
 
 function hammer () {
-		        var keyCode = "b" + (event.keyCode-48);
-		        
-		        console.log(keyCode);
-		        console.log(event.keyCode);
-		        
-		        document.all[keyCode].innerHTML = "yellow";
+	var keyCode = "b" + (event.keyCode-48);
+	
+	console.log(keyCode);
+	console.log(keypadCode[ currentMole ]);
+	if(event.keyCode-48 == keypadCode[ currentMole ]){
+		console.log("hit");
+		hit();
+	}
  }      
