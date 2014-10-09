@@ -1,4 +1,3 @@
-
 var cell = 3;
 var level = 1;
 var RanForm;
@@ -10,6 +9,13 @@ var faultCount;
 var clickCount;
 var ranFlag;
 var existFlag;
+document.oncontextmenu = new Function('return false');  
+document.onselectstart = new Function('return false');  
+
+$("body").click(function(event) {
+	event.stopPropagation()
+	});
+
 
 create();
 
@@ -21,6 +27,7 @@ function levelUp() {
 
 function removeTable() {
 	$('#t1').empty();
+
 }
 
 function create() {
@@ -59,20 +66,16 @@ function create() {
 	for (var b = 0; b < cell; b++) {
 		$('tr').append($('<td>').attr('tdNo', new String(b)));
 	}
-	paint();
-}
 
-function paint() {
 	for ( var a in RanForm) {
 		$('td').eq(RanForm[a]).addClass('selectedTrue');
 	}
-	setTimeout("disappear()", 1000);
-};
 
-function disappear(event) {
-
-	$('td').removeClass('selectedTrue');
-};
+	setTimeout(function() {
+		$('td').removeClass('selectedTrue');
+		$(document).on('click', 'td', onClickCell);	
+	}, 1250);
+}
 
 function decision() {
 
@@ -88,41 +91,55 @@ function decision() {
 			setTimeout(function() {
 				removeTable();
 				levelUp();
-			}, 2000);
+			}, 2250);
 
 		} else {
 			setTimeout(function() {
 				removeTable();
 				create();
-			}, 2000);
+			}, 2250);
 		}
 
 	}
 };
 
-$(document).on('click', 'td', function(event) {
 
-	if (clickCount < 6) {
 
-		++clickCount;
 
-		$('td').eq($('td').index(this)).addClass('selected');
+function onClickCell(event) {
+	
 
-		for (var i = 0; i < 6; i++)
-			if (RanForm[i] == $('td').index(this))
-				existFlag = true;
+	
+	var select = $('td').index(this);
 
-		if (existFlag) {
-			SuccessForm[selectCount] = $('td').index(this);
-			selectCount++;
-			existFlag = false;
+	if (($.inArray(select, SuccessForm) != -1)
+			|| ($.inArray(select, FaultForm) != -1)) {
+		console.log("있다 굿");
+	} else {
 
-		} else {
-			FaultForm[faultCount] = $('td').index(this);
-			faultCount++;
+		if (clickCount < 6) {
+
+			++clickCount;
+
+			$('td').eq($('td').index(this)).addClass('selected');
+
+			for (var i = 0; i < 6; i++)
+				if (RanForm[i] == $('td').index(this))
+					existFlag = true;
+
+			if (existFlag) {
+				SuccessForm[selectCount] = $('td').index(this);
+				selectCount++;
+				existFlag = false;
+
+			} else {
+				FaultForm[faultCount] = $('td').index(this);
+				faultCount++;
+			}
+
+			decision();
+
 		}
-
-		decision();
-
 	}
-});	
+
+}
