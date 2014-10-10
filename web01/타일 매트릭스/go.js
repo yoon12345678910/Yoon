@@ -9,13 +9,8 @@ var faultCount;
 var clickCount;
 var ranFlag;
 var existFlag;
-document.oncontextmenu = new Function('return false');  
-document.onselectstart = new Function('return false');  
-
-$("body").click(function(event) {
-	event.stopPropagation()
-	});
-
+document.oncontextmenu = new Function('return false');
+document.onselectstart = new Function('return false');
 
 create();
 
@@ -73,7 +68,45 @@ function create() {
 
 	setTimeout(function() {
 		$('td').removeClass('selectedTrue');
-		$(document).on('click', 'td', onClickCell);	
+		$('td').click(
+				event,
+				function() {
+
+					var select = $('td').index(this);
+					
+
+					if (($.inArray(select, SuccessForm) != -1)
+							|| ($.inArray(select, FaultForm) != -1)) {
+					
+					} else {
+
+						if (clickCount < 6) {
+
+							++clickCount;
+
+							$('td').eq($('td').index(this))
+									.addClass('selected');
+
+							for (var i = 0; i < 6; i++)
+								if (RanForm[i] == $('td').index(this))
+									existFlag = true;
+
+							if (existFlag) {
+								SuccessForm[selectCount] = $('td').index(this);
+								selectCount++;
+								existFlag = false;
+
+							} else {
+								FaultForm[faultCount] = $('td').index(this);
+								faultCount++;
+							}
+
+							decision();
+
+						}
+					}
+
+				});
 	}, 1250);
 }
 
@@ -103,43 +136,3 @@ function decision() {
 	}
 };
 
-
-
-
-function onClickCell(event) {
-	
-
-	
-	var select = $('td').index(this);
-
-	if (($.inArray(select, SuccessForm) != -1)
-			|| ($.inArray(select, FaultForm) != -1)) {
-		console.log("있다 굿");
-	} else {
-
-		if (clickCount < 6) {
-
-			++clickCount;
-
-			$('td').eq($('td').index(this)).addClass('selected');
-
-			for (var i = 0; i < 6; i++)
-				if (RanForm[i] == $('td').index(this))
-					existFlag = true;
-
-			if (existFlag) {
-				SuccessForm[selectCount] = $('td').index(this);
-				selectCount++;
-				existFlag = false;
-
-			} else {
-				FaultForm[faultCount] = $('td').index(this);
-				faultCount++;
-			}
-
-			decision();
-
-		}
-	}
-
-}
