@@ -9,7 +9,7 @@
 </head>
 <body>
      
-	<form action="index.jsp" method="post" onsubmit="return formCheck();">
+	<form action="insert.jsp" method="post" onsubmit="return formCheck();">
 		제목 : <input type="text" name="title" /><br> 
 		작성자 : <input type="text" name="writer" /><br> 
 		내용:<textarea name ="content"></textarea><br>
@@ -20,6 +20,8 @@
 
 	<script>
 	 
+
+	
 		function formCheck() {
 
 			var title = document.forms[0].title.value; // 사용하기 쉽도록 변수를 선언하여 담아주고,
