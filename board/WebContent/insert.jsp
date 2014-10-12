@@ -52,7 +52,7 @@
 				 
 				                "VALUES (" + 2 +", '"+title+"', '"+writer+"', '"+regdate+"', '1', '"+content+"')";
 				 
-				stmt.executeUpdate(sql);     
+			stmt.executeUpdate(sql);     
 			     
 		     
 		     con.close();
