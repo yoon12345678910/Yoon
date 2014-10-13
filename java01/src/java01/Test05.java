@@ -42,6 +42,11 @@ public class Test05 {
     return super.toString();
   }
   
+  @Override
+  public int hashCode() {
+      
+    return super.hashCode();
+  }
   
   public static void main(String[] args) {
     //한 줄 주석
