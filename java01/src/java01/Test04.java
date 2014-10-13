@@ -31,19 +31,13 @@
     net/daum/dev1
     net/daum/dev2
      
-     
-     
  */
-
-
-
 
 package java01;
 
 //하나의 소스 파일에는 public 클래스가 오직 하나만 올 수 있따.
-public class Test04{
-  public static void main(String[] args){
-    System.out.println("하하하");
-    
+public class Test04 {
+  public static void main(String[] args) {
+    System.out.println("okokokokokok");
   }
 }
