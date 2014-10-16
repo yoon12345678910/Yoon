@@ -33,7 +33,7 @@ public class Test05 {
   1)SOURCE=> 컴파일 후 버려짐. 클래스 파일에 포함하지 않는다.
   2)CLASS => 클래스 파일에 포함됨 JVM이 사용할 수 없다.
   3)RUNTIME => 클래스 파일에 포함됨 JVM이 꺼낼 수 있다
-                즉, 실행 중에 클래스 파일에 있는 주석을 꺼내 볼 수 있다.
+                즉, 실 행 중에 클래스 파일에 있는 주석을 꺼내 볼 수 있다.
   */
   @Override //상속받은 메소드인지 아닌지 체크함
     //상속받았다면 이상없지만 아니라면 에러남
@@ -47,14 +47,7 @@ public class Test05 {
       
     return super.hashCode();
   }
+
+    
   
-  public static void main(String[] args) {
-    //한 줄 주석
-    
-    /* 
-      여러줄 주석
-    */
-    
-    
-  }
 }
