@@ -1,11 +1,44 @@
+/*
+
+
+
+
+
+
+
+
+
+ */
 package java01.test51;
 
 /* 버킷 관리 */
 // 시작과 끝 버킷은 알고있어야함
 
-class MyLinkedList {
-  
-  class Bucket{
+class MyLinkedList4 {
+
+  /*
+   * member inner class 멤버 inner 클래스는 바깥 클래스의 인스턴스에 접근할 수 있따. 메소드처럼 생각하면 된다.
+   */
+
+  class Iterator {
+
+    Bucket cursor = start;
+
+    public boolean hasNext() {
+      if (cursor != end)
+        return true;
+      else
+        return false;
+    }
+
+    public Object next() {
+      Object value = cursor.value;
+      cursor = cursor.next;
+      return value;
+    }
+  }
+
+  class Bucket {
     Object value;
     Bucket next;
   }
@@ -14,11 +47,14 @@ class MyLinkedList {
   Bucket end;
 
   int size;
-  
 
-  public MyLinkedList() {
+  public MyLinkedList4() {
     start = new Bucket();
     end = start;
+  }
+
+  public Iterator iterator() {
+    return new Iterator();
   }
 
   public int add(Object value) {
@@ -28,78 +64,104 @@ class MyLinkedList {
     return ++size;
   }
 
-  private Bucket getBucketByIndex(int index){
+  private Bucket getBucketByIndex(int index) {
     Bucket cursor = start;
-    
     for (int i = 1; i <= index; i++) {
       cursor = cursor.next;
-    }
+    } // for
     return cursor;
-  };  
-  
-  
+  }
+
   public Object get(int index) {
     if (index < 0 || index >= this.size)
       return null;
 
-    return  getBucketByIndex(index).value;
+    return getBucketByIndex(index).value;
   }
 
   public int size() {
     return size;
   }
-  
-  
-  
+
   public int insert(int index, Object obj) {
     if (index < 0 || index >= this.size)
       return -1;
-    
+
     Bucket temp = new Bucket();
     temp.value = obj;
-    
-    
-    if(index == 0){
+
+    if (index == 0) {
       temp.next = start;
       start = temp;
-    }else{
-      
-    Bucket cursor = getBucketByIndex(index - 1);
+    } else {
+
+      Bucket cursor = getBucketByIndex(index - 1);
       temp.next = cursor.next;
       cursor.next = temp;
     }
-      size++;
-      return 0;
+    size++;
+    return 0;
   }
 
   public int remove(int index) {
     if (index < 0 || index >= this.size)
-    return -1;
-    
-    Bucket cursor = start;
-    if(index == 0){
+      return -1;
+
+    if (index == 0) {
       start = start.next;
-    }else{
+    } else {
       Bucket cursor = getBucketByIndex(index - 1);
       cursor.next = cursor.next.next;
     }
     size--;
     return 0;
-    
   }
-
 }
 
 public class CollectionTest04 {
 
-  public static void printArray(MyLinkedList list) {
-    for (int i = 0; i < list.size(); i++) {
-      System.out.println(list.get(i));
+  public static void printArray(MyLinkedList4 list) {
+    MyLinkedList4.Iterator iterator = list.iterator();
+
+    while (iterator.hasNext()) {
+      System.out.println(iterator.next());
     }
   }
 
   public static void main(String[] args) {
-    MyLinkedList arr = new MyLinkedList();
+    MyLinkedList4 arr = new MyLinkedList4();
+
+    for (int i = 0; i < 10000; i++) {
+      arr.add("==>" + i);
+    }
+    
+    Object value = null;
+
+    System.out.println("get(i)사용하기------------");
+   long start = System.currentTimeMillis();
+    int size = arr.size();
+    for(int i = 0; i < size; i++){
+     System.out.println(".");
+   }
+    long end = System.currentTimeMillis();
+     System.out.println("\n소요 시간: " + (end - start));
+    
+    System.out.println("Iterator 사용하기------------");
+    start = System.currentTimeMillis();
+    MyLinkedList4.Iterator iterator = arr.iterator();
+    while(iterator.hasNext()){
+      value = iterator.next();
+      System.out.println(".");
+    }
+    end = System.currentTimeMillis();
+    System.out.println("\n소요 시간: " + (end - start));
+    
+    
+    
+  }
+
+  public static void main01(String[] args) {
+    MyLinkedList4 arr = new MyLinkedList4();
     arr.add("00000");
     arr.add("11111");
     arr.add("22222");
@@ -108,60 +170,8 @@ public class CollectionTest04 {
     arr.add("55555");
     arr.add("66666");
     arr.add("77777");
-    
-    
 
     System.out.println("------------");
     printArray(arr);
-    
-   
-/*   System.out.println("-1에 입력");
-    arr.insert(-1, "-1에 입력");
-    printArray(arr);
-    
-    System.out.println("30에 입력");
-    arr.insert(30, "30에 입력");
-    printArray(arr);
-    
-    System.out.println("0번에 ! 입력");
-    arr.insert(0, "!!!!!!!");
-    printArray(arr);
-    
-    System.out.println("8번에 @ 입력");
-    arr.insert(8, "@@@@@@@@");
-    printArray(arr);
-    
-    System.out.println("4번에 # 입력");
-    arr.insert(4, "########");
-    printArray(arr);
-    
-   */
-    
-    System.out.println("-30번 삭제-------");
-    arr.remove(-30);
-    printArray(arr);
-    
-    System.out.println("30번 삭제-------");
-    arr.remove(30);
-    printArray(arr);
-    
-    System.out.println("10번 삭제-------");
-    arr.remove(10);
-    printArray(arr);
-    
-    System.out.println("0번 삭제-------");
-    arr.remove(0);
-    printArray(arr);
-    
-    System.out.println("4번 삭제-------");
-    arr.remove(4);
-    printArray(arr);
-    
-    System.out.println("6번 삭제-------");
-    arr.remove(6);
-    printArray(arr);
-    
-    
   }
-
 }
