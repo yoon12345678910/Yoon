@@ -1,6 +1,6 @@
 //<<Value Object> VO
  
-package java02;
+package java02.Refactoring;
 
 import java.io.Serializable;
 
