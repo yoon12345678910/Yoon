@@ -1,4 +1,4 @@
-package java02;
+package java02.test01;
 
 import java.util.ArrayList;
 
