@@ -2,6 +2,7 @@
   -데이터의 퍼시스턴스(Persistence) 담당
   =>데이터의 보관(등록, 조회, 변경, 삭제)
  */
+
 package java02.Refactoring;
 
 import java.io.BufferedWriter;
