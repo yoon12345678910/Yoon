@@ -3,7 +3,7 @@
   =>데이터의 보관(등록, 조회, 변경, 삭제)
  */
 
-package java02.Refactoring;
+package java02.test06;
 
 import java.io.BufferedWriter;
 import java.io.FileReader;

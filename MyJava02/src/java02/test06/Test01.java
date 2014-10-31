@@ -1,42 +1,48 @@
-//(UI)Boundary , control
+/*
+  명령어를 처리하는 Command 객체를 자동 생성하여
+  commandMap 에 등록하기
+  1) application-context.properties 파일에 명령어 처리 클래스 정보를 둔다.
+  2) 이 프로퍼티 파일을 읽고 클래스를 로딩하여 인스턴스를 생성한다.
+  3) 생성한 인스턴스를 commandMap에 등록한다.
 
-//명령을 처리하는 메서드를 별도의 클래스 분리 =>Command 패턴
-//-새로운 명령어를 추가하더라도 기존 코드를 손대지 않고
-//명령을 처리할 수 있게 하자.
-//명령어를 처리하는 메서드를 클래스로 만든다.
-//클래스는 외부 파일이기 때문에 추가하기 쉽다.
-package java02.Refactoring;
 
+*/
+package java02.test06;
+
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.Scanner;
-import java02.Refactoring.commands.AddCommand;
-import java02.Refactoring.commands.DeleteCommand;
-import java02.Refactoring.commands.ExitCommand;
-import java02.Refactoring.commands.HelpCommand;
-import java02.Refactoring.commands.ListCommand;
-import java02.Refactoring.commands.TestCommand;
-import java02.Refactoring.commands.UpdateCommand;
-import java02.Refactoring.commands.ViewCommand;
+import java.util.Set;
 
 public class Test01 {
   static Scanner scanner;
   static ScoreDao scoreDao;
-
-  public static void main(String[] args) {
-    // 명령어를 처리할 객체를 담아둔 맵
-    HashMap<String, Command> commandMap = new HashMap<String, Command>();
+//명령어를 처리할 객체를 담아둔 맵
+  static HashMap<String, Command> commandMap;
+                                
+  public  void  init() throws Exception{
+    commandMap = new HashMap<String, Command>();
     
-    commandMap.put("list", new ListCommand());
-    commandMap.put("add", new AddCommand());
-    commandMap.put("view", new ViewCommand());
-    commandMap.put("delete", new DeleteCommand());
-    commandMap.put("update", new UpdateCommand());
-    commandMap.put("exit", new ExitCommand());
-    commandMap.put("help", new HelpCommand());
-    commandMap.put("test", new TestCommand());
-    scoreDao = new ScoreDao();
+    Properties props = new Properties();
+    props.load(new FileReader("application-context.properties"));
+    Set keySet = props.keySet();
+    
+    String classname = null;
+    Class clazz = null;
+    Command command = null;
+    
+    for(Object key : keySet){
+      classname = (String) props.get(key);
+      //System.out.println(classname);
+      clazz = Class.forName(classname.trim());
+      command = (Command) clazz.newInstance();
+      commandMap.put((String) key, command);
+    }
 
+    scoreDao = new ScoreDao();
+    
     try {
       scoreDao.load();
     } catch (Exception e) {
@@ -44,6 +50,10 @@ public class Test01 {
     }
 
     scanner = new Scanner(System.in);
+  }
+  
+  
+  public  void service(){
     // 인터페이스참조변수란? 인터페이스를 구현한 규칙에 따라서 만든 객체라면 주소를 저장할 수 있다.
     Command command = null;//초기값 null.. 리턴값없으면 null
 
@@ -88,12 +98,22 @@ public class Test01 {
         System.out.println("명령어 처리 중 오류 발생. 다시 시도해 주세요.");
       }
     }
+  }
+  
+  public  void destroy(){
     scanner.close();
   }
-
-  private static String[] promptCommand() {
+  
+  private  String[] promptCommand() {
     System.out.print("명령>");
     String[] token = scanner.nextLine().split(" ");
     return token;
+  }
+  
+  public static void main(String[] args) throws Exception {
+    Test01 app = new Test01();
+    app.init();
+    app.service();
+    app.destroy();
   }
 }
