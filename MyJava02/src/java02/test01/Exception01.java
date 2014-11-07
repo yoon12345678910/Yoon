@@ -9,7 +9,7 @@ package java02.test01;
 
 public class Exception01 {
   public static float divide(float a, float b) {
-    if (b == 0) { // 예외 상황 발생
+    if (b == 0) { // 예외 상황 발생	
       return -999999.0f; // 특별한 값을 리턴.
     }
     return a / b;
