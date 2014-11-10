@@ -348,9 +348,94 @@ WHERE QTY > 1 AND QTY <= 5;
  select *from ORDERS WHERE PNO IN(1, 2, 3);
  
  
+ /* 7월 이후 주문 정보 중에서 애플 제품을 제외한 주문 정보
+  * MySQL은 MINUS가 없다, 다른 문법으로 대체해야한다.*/
+ select * from ORDERS
+ WHERE ODATE >= '2014-07-01'
+ AND PNO NOT IN (1, 2, 3);
+ 
+ /*서브 쿼리
+  * 1) 주문 제품의 주문 번호와 제품명을 출력하라*/
+ select 
+ ONO, 
+ PNO,
+ (SELECT PNAME FROM PRODUCTS WHERE PNO =T1.PNO) AS NAME,  
+ QTY FROM ORDERS T1;
  
  
+ /*2) 검새5ㄱ어와 일치하는 회사 제품의 주문 정보를 출력하시오*/
+ SELECT*
+ FROM ORDERS
+ WHERE PNO IN(SELECT PNO FROM PRODUCTS WHERE MKNO = 1);
  
+ /*3) '2014-07-01' 이후에 주문한 정보 중에서  u01, u05가 주문한것*/
+ select *
+ from (select *from ORDERS WHERE ODATE >= '2014-07-01') as T1
+ WHERE UID IN ('u01', 'u05');
  
+ /*1) CROSS 조인
+  * 두 개의 테이블 데이터를 M:N 조인*/
+SELECT ONO, PNO, QTY FROM ORDERS;
+SELECT PNO, PNAME FROM PRODUCTS;
+
+select ONO, T1.PNO, T1.QTY, PNAME 
+FROM ORDERS T1, PRODUCTS T2;
+
+/*2) NATURAL 조인
+ * => 두 개 테이블의 공통 컬럼을 기준으로 조인한다.
+ * => 외부키를 기준으로 조인을 수행한다.
+ * */
+
+select ONO, T1.PNO, T1.QTY, PNAME 
+FROM ORDERS T1, PRODUCTS T2
+WHERE T1.PNO = T2.PNO;
+
+/*2) NATURAL 조인 => T1 JOIN T2 USING(컬럼명, 컬럼명, ....)
+ * 단, 조인할 때 기준이 되는 컬럼명이 일치해야한다. 
+ * */
+ select ONO, T1.PNO, T1.QTY, PNAME 
+FROM ORDERS T1 JOIN PRODUCTS T2 USING(PNO);
+ 
+/*2) NATURAL 조인 => T1 JOIN T2 ON 조인조건1....
+  => 조인의 기준이 되는 컬럼명이 다를 때 사용
+*/
+ select ONO, T1.PNO, T1.QTY, PNAME 
+FROM ORDERS T1 JOIN PRODUCTS T2 ON T1.PNO = T2.PNO;
+ 
+
+/*3) OUTER JOIN
+ * 제품 정보와 사진정보를 출력하되, 사진 정보도 함께 출력하라
+ * --다음 질의문은 조잉ㄴ 가능한 결과만 출력한다.
+ * */
+SELECT T1.PNO, T1.PNAME, T2.URL
+FROM PRODUCTS T1 JOIN PROD_PHOTS T2 ON T1.PNO = T2.PNO
+
+
+/*조인이 불가능하더라도, 즉 조인할 데이터가 상대 테이블에 없더라도 
+  반드시 기준이 되는 테이블의 데이터를 모두 출력하고 싶다면 OUTER 조인을 사용하라.
+ 문법:
+  왼쪽 T1테이블을 기준으로 T2 테이블과 조인하라
+  =>T1  LEFT(기준테이블) OUTER JOIN T2 ON 조인조건1....
+  => 기준 테이블인 T1의 데이터는 모두 출력될 것이다.
+  **/
+
+SELECT T1.PNO, T1.PNAME, T2.URL
+FROM PRODUCTS T1 LEFT OUTER JOIN PROD_PHOTS T2 ON T1.PNO = T2.PNO
+
+
+
+
+/*******************************************************************************
+ * 문제 : 다음 결과를 출력하시오! 4개 테이블 쪼인쪼인
+ * 주문번호, 제품명, 제조사명, 주문수량, 잔여수량, 고객명, 고객이메일
+ ******************************************************************************/
+
+ SELECT T1.ONO, T2.PNAME, T3.MKNAME, T1.QTY, T2.QTY, T4.UNAME, T4.EMAIL 
+ FROM 
+ ORDERS T1 LEFT OUTER JOIN PRODUCTS T2 ON T1.PNO = T2.PNO
+ LEFT OUTER  JOIN MEMBERS T4 ON T4.UID = T1.UID
+ LEFT OUTER  JOIN MAKERS T3 ON T2.MKNO = T3.MKNO;
+ 
+
 
 
