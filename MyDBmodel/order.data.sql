@@ -136,6 +136,16 @@ values(5, 'a05.gif');
 insert into PROD_PHOTS( PNO, URL)
 values(7, 'a07.gif');
 
+insert into PROD_PHOTS( URL)
+values('x01.gif');
+
+insert into PROD_PHOTS( URL)
+values('x02.gif');
+
+insert into PROD_PHOTS( URL)
+values('x03.gif');
+
+
 
 /* 주문 정보 입력*/
 insert into ORDERS(PNO, UID, QTY, ODATE)
@@ -156,14 +166,191 @@ values (3, 'u07', 6, '2014-09-07');
 insert into ORDERS(PNO, UID, QTY, ODATE)
 values (7, 'u10', 1, '2014-10-07');
 
+insert into ORDERS(PNO, UID, QTY, ODATE)
+values (1, 'u01', 3, '0000-00-00');
+
+
+/* 
+ *  UPDATE명령
+ * 문법
+ * update 테이블명 set 컬럼명 = 값, 컬럼명=값,....
+ * 
+ * ㅇㄷ
+ * 
+ * */
+
+
+insert into ORDERS(PNO, UID, QTY, ODATE)
+values (7, 'u03', 5, '2014-11-10');
+
+update ORDERS set 
+QTY=3,
+ODATE='2014-11-09'
+where ONO =7
+
+/*  DELETE 명령
+ *  문법:
+ *  delete from 테이블명 where 조건1...
+ * 
+ */
+
+
+delete from ORDERS where ONO=7;
 
 
 
+/* DISTINCT
+ * 중복 데이터 제거
+ * distinct 를 붙이지 않으면 기본으로 ALL이다.
+ * 1.모든 제품 번호를 출력하라
+ * */
+select /*ALL*/ PNO from PRODUCTS;
+
+/* 2. 모든 주문 제품의 번호를 추력하라
+ * */
+select  /*ALL*/ PNO form ODERS;
+
+
+/* 3.주문한 제품이 무엇무엇이 있는지 목록을 출력하라*/
+select DISTINCT PNO from ORDERS;
+
+/* ORDER BY절
+ * 출력결과정렬
+ * ORDER BY /*ASC*/ 컬럼명, /*ASC*/ 컬럼명, ...
+ * =>나열된 컬럼 순서대로 정렬한다. 기본은 상향정렬(ㄱ ~ ㅎ)이다
+ * ORDER BY DESC 컬럼명, ASC 컬럼명, ... 
+ 
+ *  정렬조건
+ * ASC(ENDING)  => 오름차순
+ * DESC(ENDING) = > 내림차순
+ * ORDER BY 절 수행 후 SELECT 실행
+*/
+
+/*1)기본출력*/
+select *from MEMBERS;
+
+/*2)이름을 오름차순으로 정렬하라*/
+select UID, UNAME, EMAIL from MEMBERS ORDER BY UNAME /*ASC*/;
+
+/*3)이름을 내림차순으로 정렬하라*/
+select UID, UNAME, EMAIL from MEMBERS ORDER BY  UNAME DESC;
+
+/*4)주문 정보를 제품 번호의 오름 차순으로 정렬하라*/
+select *from ORDERS ORDER BY PNO;
+
+/*5)주문 정보를 제품 번호의 오름 차순으로 정렬하고 
+ *  사용자 아이디로 오름차순으로 정렬하라 */
+select *from ORDERS ORDER BY PNO, UID;
+
+/*6)주문 정보를 제품 번호의 오름 차순으로 정렬하고 
+  사용자 아이디로 내림차순으로 정렬하라*/
+select *from ORDERS ORDER BY PNO, UID DESC;
 
 
 
+/*7)주문 정보를 제품 번호의 오름 차순으로 정렬하고 
+  사용자 아이디로 내림차순으로 정렬하라
+  => 정렬을 먼저 한 다음 SELECT를 실행한다.*/
+select *from ORDERS ORDER BY PNO, UID DESC;
+
+/*별명 붙이기 
+ * 문법:
+ * SELECT 컬럼명 [AS] 벌명, ...*/
+select ONO AS NO, ODATE AS 'Order Date' , PNO 'Product No',
+UID id from ORDERS;
 
 
+/* WHERE 절
+ * 문법
+ * WHERE 조건1 (AND | OR) 조건2 ...
+ */
 
+
+/*연산자 사용*/
+/*1) 더하기 연산자*/
+select ono, qty, qty * 500000 as TOTAL from ORDERS;
+
+/*2)비교 연산자*/
+select ONO, QTY FROM ORDERS
+WHERE QTY > 2;
+
+select ONO, QTY FROM ORDERS
+WHERE QTY = 1;
+
+select ONO, QTY FROM ORDERS
+WHERE QTY > 1 AND QTY <= 5;
+
+/* 문자열 비교 */
+ select UID, UNAME, EMAIL from MEMBERS 
+ WHERE UNAME ='홍길동';
+ 
+ /*   '%'는 0개 이상의 글자*/ 
+ select UID, UNAME, EMAIL from MEMBERS 
+ WHERE UNAME LIKE  '김%';
+
+ /*   '-'는 1개의 글자*/
+  select UID, UNAME, EMAIL from MEMBERS 
+ WHERE UNAME LIKE  '김_진';
+
+ 
+ /*제품명에 '럭시' 라는 글자를 포함한 모든 제품 선택하기
+   => 주의! 검색 속도가 매우 느리다. */
+ select PNO, PNAME
+ FROM PRODUCTS
+ WHERE PNAME LIKE '%럭시%';
+ 
+ /* IN
+  * 표현식 IN(값, 값, 값, ....)
+  * => 표현식이 IN에 들어있는 값과 일치하면 TRUE*/
+ 
+ /*삼성과 애플 제품을 출력하시오*/
+ SELECT PNO, PNAME, MKNO
+ FROM PRODUCTS
+ WHERE MKNO = 1 OR MKNO = 2;
+ 
+  SELECT PNO, PNAME, MKNO
+ FROM PRODUCTS
+ WHERE MKNO IN(1 , 2);
+ 
+ /* NULL 여부 검사*/
+ select *from PROD_PHOTS
+ WHERE PNO IS NULL;
+ 
+  select *from PROD_PHOTS
+ WHERE PNO IS NOT NULL;
+
+ /* BETWEEN A AND B*/
+ select *from ORDERS
+ WHERE QTY >= 1 AND QTY <= 3;
+ 
+ select *from ORDERS
+ WHERE QTY BETWEEN 1 AND 3;
+ 
+ /*UNION => 결과의 결합
+  두 개의 결과를 합쳐서 하나로 다루고 싶을 때
+  예) 제품 이름과 제조사이름을 알고 싶다.*/
+ select  PNAME FROM PRODUCTS
+ UNION
+ select MKNAME FROM MAKERS;
+ 
+ /*예) 2014년 7월 이후의 주문 정보와 애플 제품의 주문 정보를 출력하시오. */
+ 
+ /*UNION=> 두 결과 데이터를 합칠 때 중복 데이터 제거 */
+ select * from ORDERS
+ WHERE ODATE >= '2014-07-01'
+ UNION
+ select *from ORDERS WHERE PNO IN(1, 2, 3);
+ 
+ /*UNION ALL=> 두 결과 데이터를 중복에 상관없이 합친다..*/ 
+  select * from ORDERS
+ WHERE ODATE >= '2014-07-01'
+ UNION ALL
+ select *from ORDERS WHERE PNO IN(1, 2, 3);
+ 
+ 
+ 
+ 
+ 
+ 
 
 
