@@ -1,6 +1,11 @@
-/*	페이징 처리
- * =>DBMS마다  
-
+/* 
+PreparedStatement 사용하기
+=>SQL문을 미리 준비하여 입력 값을 파라미터로 전달한다.
+=> 이점
+		1)서버에 SQL문을 보내기 전에 한번만 컴파일한다.
+			=> 만약 같은 SQL문을 한번에 여러번 실행하는 경우에는 속도가 빠르다.
+		2) 입력 값을 파라미터로 전달하기 때문에 -> 바이너리 데이터 입력가능하다.
+		3) 코딩이 간결하다.
  */
 package java02.test15;
 
@@ -12,9 +17,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDao {
+public class ProductDao02 {
   
-  public ProductDao() {}
+  public ProductDao02() {}
   
   public Product selectOne(int no) {
 	  Connection con =null;
@@ -109,7 +114,7 @@ public class ProductDao {
 	}
   }
   
-  public List<Product> selectList(int pageNo, int pageSize) {
+  public List<Product> selectList() {
 		Connection con =null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -124,15 +129,8 @@ public class ProductDao {
 				);
 		
 		stmt = con.createStatement();
-		
-		String sql = "SELECT PNO, PNAME, QTY, MKNO FROM PRODUCTS ";
-		
-		if(pageSize > 0){
-			sql += " limit " + ((pageNo - 1) * pageSize) 
-					+ ","	+ pageSize;
-		}
-		
-		rs = stmt.executeQuery(sql);
+		rs = stmt.executeQuery(
+				"SELECT PNO, PNAME, QTY, MKNO FROM PRODUCTS");
 		
 		ArrayList<Product> list = new ArrayList<Product>();
 		Product product =null;

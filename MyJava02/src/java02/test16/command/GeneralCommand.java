@@ -1,16 +1,16 @@
-package java02.test15.command;
+package java02.test16.command;
 
 import java.util.Map;
-import java02.test15.ProductDao;
-import java02.test15.annotation.Command;
-import java02.test15.annotation.Component;
+import java02.test16.MemberDao;
+import java02.test16.annotation.Command;
+import java02.test16.annotation.Component;
 
 @Component
 public class GeneralCommand {
-  ProductDao productDao;
+  MemberDao memberDao;
   
-  public void setProductDao(ProductDao productDao) {
-    this.productDao = productDao;
+  public void setMemberDao(MemberDao memberDao) {
+    this.memberDao = memberDao;
   }
 
   @Command("exit")
