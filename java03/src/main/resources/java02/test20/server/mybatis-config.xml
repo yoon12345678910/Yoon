@@ -18,8 +18,13 @@
   
   <!-- SQL문을 저장한 파일의 경로 설정  -->
   <mappers>
-    <mapper resource="java02/test19/server/ProductDao.xml"/>
+    <mapper resource="java02/test20/server/MemberDao.xml"/>
   </mappers>
 </configuration>
+
+
+<!--
+ add?uid=u11&pwd=1&uname=윤종익&tel=111-111&email=u11@naver.com&fax=111&det_addr=1&ano=1
+ -->
 
 

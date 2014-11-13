@@ -13,7 +13,7 @@ public class ProductCommand {
   ProductDao productDao;
   Scanner scanner;
   
-  public void setProductDao(ProductDao productDao) {
+  public void setMemberDao(ProductDao productDao) {
     this.productDao = productDao;
   }
   
