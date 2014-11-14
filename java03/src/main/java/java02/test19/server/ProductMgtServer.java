@@ -2,94 +2,41 @@ package java02.test19.server;
 
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Scanner;
-import java.util.Set;
-import java02.test19.server.annotation.Command;
-import java02.test19.server.annotation.Component;
+
+import java02.test19.server.CommandMapping.CommandInfo;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.reflections.ReflectionUtils;
-import org.reflections.Reflections;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ProductMgtServer {
-  static class CommandInfo {
-    public Object instance;
-    public Method method;
-  }
-  
+
   Scanner scanner; 
-  ProductDao productDao;
-  HashMap<String,CommandInfo> commandMap;
+  ApplicationContext appCtx;
+  CommandMapping commandMapping;
   
   public void init() throws Exception {
-	  //MyBatis설정 파일 경로
 	  String resource = "java02/test19/server/mybatis-config.xml";
 	  
-	  //설정 파일을 읽어 들ㅇ리 입력 스트림 객체를 준비한다.
-	  //Resources의 getResourceAsStream()을 사용하면,
-	  //mybatis 설정 파일을 클래스 경로에서 찾는 스트림 객체를 리턴한다.
 	  InputStream inputStream = Resources.getResourceAsStream(resource);
-	 
-	  /*	mybatis 설정 파일의 위치를 직접 지정해주는 방식d
-	      위의 방식이 좋다
-	   FileInputStream input = 
-			  new FileInputStream("/home/bit/git/java03/bin/" + resource);
-	  */
-	  
-	  //mybatis 설정 파일대로 동작할 SqlSessionFactory를 얻는다.
-	  //빌더 역할을 수행하는 객체를 통해서 얻는다.
 	  SqlSessionFactory sqlSessionFactory = 
 			  new SqlSessionFactoryBuilder().build(inputStream);
 	  
-    productDao = new ProductDao();
     scanner = new Scanner(System.in);
-    commandMap = new HashMap<>();
-    productDao.setSqlSessionFactory(sqlSessionFactory);
     
-    Reflections reflections = 
-        new Reflections("java02.test19.server.command");
-    Set<Class<?>> clazzList = 
-        reflections.getTypesAnnotatedWith(Component.class);
+    appCtx = new ApplicationContext("java02.test19.server");
+    appCtx.addBean("sqlSessionFactory", sqlSessionFactory);
+    appCtx.injectDependency();
     
-    Object command = null;
-    Component component = null;
-    Method method = null;
-    CommandInfo commandInfo = null;
-    Command commandAnno = null;
-    
-    for (Class clazz : clazzList) {
-      component = (Component) clazz.getAnnotation(Component.class);
-      command = clazz.newInstance();
-
-      Set<Method> methods = ReflectionUtils.getMethods(
-          clazz,
-          ReflectionUtils.withAnnotation(Command.class));
-      
-      for (Method m :methods) {
-        commandAnno = m.getAnnotation(Command.class);
-        commandInfo = new CommandInfo();
-        commandInfo.instance = command;
-        commandInfo.method = m;
-        commandMap.put(commandAnno.value(), commandInfo);
-      }
-      
-      try { 
-        method = clazz.getMethod("setProductDao", ProductDao.class);
-        method.invoke(command, productDao);
-      } catch (Exception e) {}
-      
-      try { 
-        method = clazz.getMethod("setScanner", Scanner.class);
-        method.invoke(command, scanner);
-      } catch (Exception e) {}
-    }
+    // objPool 에서 @Command 애노테이션이 붙은 메서드를 찾는다
+    //명령어와 메서드 연결 정보를  구축한다.
+    commandMapping = new CommandMapping();
+    commandMapping.prepare(appCtx.getAllBeans());
   }
   
   class ServiceThread extends Thread {
@@ -105,13 +52,11 @@ public class ProductMgtServer {
     
     private void parseQueryString(
         String query, HashMap<String,Object> map) {
-      //예) query :  name=제품명&qty=20&mkno=6
-      // ==> {"name=제품명","qty=20","mkno=6"}
       String[] entryList = query.split("&");
       String[] token = null;
       
       for (String entry : entryList) {
-        token = entry.split("="); // 예)name=제품명
+        token = entry.split("="); 
         map.put(token[0], token[1]);
       }
     }
@@ -121,7 +66,7 @@ public class ProductMgtServer {
       CommandInfo commandInfo = null;
       try {
         String[] token = in.nextLine().split("\\?");
-        commandInfo = commandMap.get(token[0]);
+        commandInfo = commandMapping.getCommandInfo(token[0]);
         
         if (commandInfo == null) {
           out.println("해당 명령을 지원하지 않습니다.");
@@ -165,12 +110,6 @@ public class ProductMgtServer {
   
   public void destroy() {
     scanner.close();
-  }
-
-  private String[] promptCommand() {
-    System.out.print("명령>");
-    String[] token = scanner.nextLine().split(" ");
-    return token;
   }
 
   public static void main(String[] args) throws Exception {
