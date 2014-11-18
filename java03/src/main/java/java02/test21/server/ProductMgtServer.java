@@ -1,17 +1,16 @@
 package java02.test21.server;
 
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Scanner;
+import java02.test21.server.command.CommandMapping;
+import java02.test21.server.command.CommandMapping.CommandInfo;
 
-import java02.test21.server.CommandMapping.CommandInfo;
-
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class ProductMgtServer {
@@ -21,22 +20,18 @@ public class ProductMgtServer {
   CommandMapping commandMapping;
   
   public void init() throws Exception {
-	  String resource = "java02/test21/server/mybatis-config.xml";
-	  
-	  InputStream inputStream = Resources.getResourceAsStream(resource);
-	  SqlSessionFactory sqlSessionFactory = 
-			  new SqlSessionFactoryBuilder().build(inputStream);
 	  
     scanner = new Scanner(System.in);
     
-    appCtx = new ApplicationContext("java02.test21.server");
-    appCtx.addBean("sqlSessionFactory", sqlSessionFactory);
-    appCtx.injectDependency();
-    
+    appCtx =
+          new ClassPathXmlApplicationContext(
+              new String[]{"java02/test21/server/application-context.xml"});
+      
     // objPool 에서 @Command 애노테이션이 붙은 메서드를 찾는다
     //명령어와 메서드 연결 정보를  구축한다.
     commandMapping = new CommandMapping();
-    commandMapping.prepare(appCtx.getAllBeans());
+    commandMapping.prepare(
+   		 appCtx.getBeansWithAnnotation(Component.class).values()); //values 값은 컬렉션 객체
   }
   
   class ServiceThread extends Thread {
