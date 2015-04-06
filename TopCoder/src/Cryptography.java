@@ -16,7 +16,7 @@ public long test(int[] numbers){
 			temp *= numbers[j];	
 			}
 		}
-		System.out.println(ans + "," + temp);
+		System.out.println(i+1 + " 번째 " + ans + "," + temp);
 		ans = Math.max(ans,temp);
 	}
 	return ans;
