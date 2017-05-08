@@ -1,0 +1,94 @@
+<input id='search' type='text'>
+<ul id ='list'>
+</ul>
+
+
+
+var List = [
+	"자전거",
+	"MTB자전거",
+	"자전거 브랜드",
+	"자전거 가격",
+	"수리비 (9,000)",
+	"기어 변속",
+	"기타 상품",
+	"자전거 자전거 브랜드 브랜드 자전거",
+	"전거브   전 거 브 전거 브 전거브 전거"
+] ;
+          
+document.getElementById('search').onkeyup = function(){
+	document.getElementById('list').innerHTML = '';
+	if(this.value.replace(/ /gi, "").length <= 0) return;
+	  
+	var searchResult = [];
+	var html = '';
+	var li;
+	  
+	for(var i = 0, len = List.length; i < len; i++){
+		if(List[i].toLowerCase().replace(/ /gi, "").indexOf(this.value.toLowerCase().replace(/ /gi, "")) !== -1){
+			searchResult.push(List[i]);
+		}
+	}
+	  
+	for(var i in searchResult){
+		li = document.createElement('li');
+		li.innerHTML = highlight(searchResult[i], this.value);
+		document.getElementById('list').appendChild(li);
+	}
+  
+}   
+         
+function highlight(value, term) {
+	var nsValue 	= value.replace(/ /gi, "");
+	var nsTerm 		= term.replace(/ /gi, "");
+	var termArray	= [];
+	var clone 		= '';
+	var start 		= 0;
+	var end 		= 0;
+	var space 		= 0;
+	var endFlag		= false;
+	var existFlag 	= false;
+	var result 		= value;
+	
+	var setting = function(){
+		var pos = nsValue.toLowerCase().indexOf(nsTerm.toLowerCase(), end - space);
+		if(pos == -1) endFlag = false;
+		clone = '';
+		start = space + pos;
+		end = start + nsTerm.length -1;
+	}
+	
+	setting();
+	   
+	for(var i = 0; i < value.length; i++){
+		if(value.charAt(i) == ' '){
+			space ++;
+			start ++;
+			end ++;
+		}
+		
+		if(i >= start){
+			clone += value.charAt(i);
+		}
+		
+		if(i == end){
+			existFlag = false;
+			for(var a in termArray){
+				if(termArray[a] == clone){
+					existFlag = true;
+					break;
+				} 
+			}
+			
+			if(existFlag == false) termArray.push(clone);
+			setting();
+			if(endFlag == true) break;
+		}
+	}   
+	
+	for(var i in termArray) {
+		result = result.replace(new RegExp("(?!<[^<>]*)(" + termArray[i].replace(/([\^\$\(\)\[\]\{\}\*\.\+\?\|\\])/gi, "\\$1") + ")(?![^<>]*>)", "gi"), "<span style='color: #ff9000;'>" + termArray[i] + "</span>")
+	}
+	
+	return result;
+};
